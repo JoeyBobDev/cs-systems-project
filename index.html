@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shahzeb's CS Projects</title>
+<style>
+:root {
+    --bg: #fafafa;
+    --fg: #1a1a1a;
+    --muted: #666;
+    --border: #ddd;
+    --card-bg: #fff;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --code-bg: #f3f4f6;
+    --terminal-bg: #0d1117;
+    --terminal-fg: #c9d1d9;
+    --terminal-green: #7ee787;
+    --terminal-blue: #79c0ff;
+    --terminal-yellow: #e3b341;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #111;
+        --fg: #e5e5e5;
+        --muted: #999;
+        --border: #333;
+        --card-bg: #1a1a1a;
+        --accent: #60a5fa;
+        --accent-hover: #93bbfd;
+        --code-bg: #1e1e1e;
+    }
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background: var(--bg);
+    color: var(--fg);
+    line-height: 1.6;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border);
+}
+
+header h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
+header p { color: var(--muted); font-size: 0.85rem; }
+
+nav {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+}
+
+nav button {
+    background: var(--card-bg);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    padding: 0.5rem 1rem;
+    font-family: inherit;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+nav button:hover, nav button.active {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+}
+
+.portfolio-link {
+    display: block;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.portfolio-link a {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    text-decoration: none;
+    padding: 0.75rem 2rem;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.portfolio-link a:hover { background: var(--accent-hover); }
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Blog panel */
+.blog-post {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+}
+
+.blog-post .date { color: var(--muted); font-size: 0.8rem; }
+.blog-post h3 { margin: 0.25rem 0 0.5rem; font-size: 1rem; }
+.blog-post p { font-size: 0.85rem; color: var(--muted); }
+.blog-post img {
+    max-width: 100%;
+    margin-top: 0.75rem;
+    border: 1px solid var(--border);
+}
+
+.blog-editor {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.blog-editor h3 { margin-bottom: 0.75rem; font-size: 0.95rem; }
+
+.blog-editor input, .blog-editor textarea, .blog-editor select {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: var(--bg);
+    color: var(--fg);
+    border: 1px solid var(--border);
+    font-family: inherit;
+    font-size: 0.85rem;
+}
+
+.blog-editor textarea { height: 80px; resize: vertical; }
+
+.blog-editor button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: 0.5rem 1.25rem;
+    font-family: inherit;
+    cursor: pointer;
+}
+
+/* Coursework panel */
+.course-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.course-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 1rem;
+}
+
+.course-card h3 { font-size: 0.95rem; margin-bottom: 0.25rem; }
+.course-card .semester { color: var(--accent); font-size: 0.8rem; margin-bottom: 0.5rem; }
+.course-card p { font-size: 0.8rem; color: var(--muted); }
+
+/* Interactive panel */
+.terminal {
+    background: var(--terminal-bg);
+    color: var(--terminal-fg);
+    padding: 1rem;
+    font-size: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #30363d;
+}
+
+.terminal-header {
+    color: var(--terminal-green);
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.terminal-output {
+    white-space: pre-wrap;
+    max-height: 350px;
+    overflow-y: auto;
+    margin-bottom: 0.5rem;
+}
+
+.terminal-input {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.terminal-input span { color: var(--terminal-green); }
+
+.terminal-input input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--terminal-fg);
+    font-family: inherit;
+    font-size: 0.8rem;
+    outline: none;
+}
+
+.project-tabs {
+    display: flex;
+    gap: 0;
+    margin-bottom: 0;
+}
+
+.project-tabs button {
+    background: var(--card-bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    padding: 0.5rem 1rem;
+    font-family: inherit;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.project-tabs button.active {
+    background: var(--terminal-bg);
+    color: var(--terminal-green);
+    border-color: #30363d;
+}
+
+.project-desc {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+.project-desc h3 { margin-bottom: 0.5rem; }
+.project-desc code {
+    background: var(--code-bg);
+    padding: 0.1rem 0.3rem;
+    font-size: 0.8rem;
+}
+</style>
+</head>
+<body>
+
+<header>
+    <h1>CS Systems Projects</h1>
+    <p>compiler &middot; operating system &middot; database engine</p>
+</header>
+
+<div class="portfolio-link">
+    <a href="#" id="portfolio-btn">&#8592; Back to Portfolio</a>
+</div>
+
+<nav>
+    <button class="active" onclick="showPanel('blog')">Blog</button>
+    <button onclick="showPanel('coursework')">Coursework</button>
+    <button onclick="showPanel('interactive')">Interactive</button>
+</nav>
+
+<!-- BLOG PANEL -->
+<div id="panel-blog" class="panel active">
+    <div class="blog-editor">
+        <h3>+ New Post</h3>
+        <input type="text" id="post-title" placeholder="Title">
+        <input type="date" id="post-date">
+        <textarea id="post-body" placeholder="Write something..."></textarea>
+        <input type="file" id="post-image" accept="image/*">
+        <button onclick="addPost()">Post</button>
+    </div>
+    <div id="blog-posts"></div>
+</div>
+
+<!-- COURSEWORK PANEL -->
+<div id="panel-coursework" class="panel">
+    <div class="course-grid" id="course-grid"></div>
+</div>
+
+<!-- INTERACTIVE PANEL -->
+<div id="panel-interactive" class="panel">
+    <div class="project-tabs">
+        <button class="active" onclick="switchProject('compiler')">Compiler</button>
+        <button onclick="switchProject('os')">OS</button>
+        <button onclick="switchProject('db')">Database</button>
+    </div>
+
+    <div class="terminal">
+        <div class="terminal-header" id="terminal-header">scc - c compiler</div>
+        <div class="terminal-output" id="terminal-output"></div>
+        <div class="terminal-input">
+            <span id="terminal-prompt">$</span>
+            <input type="text" id="terminal-input" placeholder="Type a command..."
+                   onkeydown="if(event.key==='Enter')runCommand()">
+        </div>
+    </div>
+
+    <div class="project-desc" id="project-desc"></div>
+</div>
+
+<script>
+// Panel switching
+function showPanel(name) {
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + name).classList.add('active');
+    event.target.classList.add('active');
+}
+
+// Blog
+let posts = [
+    {title: "Finished the B-Tree Implementation", date: "2024-03-15", body: "Finally got the B-tree delete operation working with proper rebalancing. The merge/redistribute logic was tricky — had to handle the case where borrowing from a sibling leaves the parent underflowed. Drew out every case on paper first."},
+    {title: "Compiler: Code Generation Works", date: "2024-05-22", body: "The stack VM is executing generated bytecode correctly now. Fibonacci runs, factorial runs, even nested function calls. The hardest part was getting the call frame base pointers right for local variable access across recursive calls."},
+    {title: "OS Memory Manager: LRU Paging", date: "2022-11-10", body: "Implemented LRU page replacement. When physical memory is full, the page with the oldest access timestamp gets evicted. Simple but effective. Next up: process scheduling with round-robin and priority queues."},
+    {title: "Why I Built These Projects", date: "2022-11-01", body: "Starting my deep dive into systems programming. The goal: understand what happens below the abstractions. A compiler to understand language → machine translation. An OS to understand resource management. A database to understand persistent data structures."}
+];
+
+function renderPosts() {
+    const container = document.getElementById('blog-posts');
+    container.innerHTML = posts
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .map(p => `
+            <div class="blog-post">
+                <div class="date">${p.date}</div>
+                <h3>${p.title}</h3>
+                <p>${p.body}</p>
+                ${p.image ? `<img src="${p.image}" alt="">` : ''}
+            </div>
+        `).join('');
+}
+
+function addPost() {
+    const title = document.getElementById('post-title').value;
+    const date = document.getElementById('post-date').value;
+    const body = document.getElementById('post-body').value;
+    const fileInput = document.getElementById('post-image');
+
+    if (!title || !body) return;
+
+    const post = { title, date: date || new Date().toISOString().split('T')[0], body };
+
+    if (fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            post.image = e.target.result;
+            posts.push(post);
+            renderPosts();
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+    } else {
+        posts.push(post);
+        renderPosts();
+    }
+
+    document.getElementById('post-title').value = '';
+    document.getElementById('post-body').value = '';
+    document.getElementById('post-date').value = '';
+    fileInput.value = '';
+}
+
+// Coursework
+const courses = [
+    {name: "CS 301 - Operating Systems", semester: "Fall 2022", desc: "Process management, memory virtualization, file systems, concurrency. Built a kernel simulation as the semester project."},
+    {name: "CS 350 - Compilers", semester: "Spring 2024", desc: "Lexical analysis, parsing, semantic analysis, code generation. Built a compiler for a C-like language targeting a stack VM."},
+    {name: "CS 340 - Database Systems", semester: "Spring 2024", desc: "Relational model, SQL, B-tree indexing, query optimization, transaction processing. Built a SQL database engine from scratch."},
+    {name: "CS 200 - Data Structures", semester: "Fall 2021", desc: "Arrays, linked lists, trees, graphs, hash tables. Complexity analysis and algorithm design."},
+    {name: "CS 250 - Computer Architecture", semester: "Spring 2022", desc: "ISA design, pipelining, cache hierarchies, virtual memory, I/O systems."},
+    {name: "CS 310 - Algorithms", semester: "Fall 2022", desc: "Divide and conquer, dynamic programming, greedy algorithms, graph algorithms, NP-completeness."},
+    {name: "MATH 301 - Linear Algebra", semester: "Spring 2022", desc: "Vector spaces, linear transformations, eigenvalues, SVD. Applications in ML and graphics."},
+    {name: "CS 370 - Software Engineering", semester: "Fall 2023", desc: "SDLC, agile methodology, design patterns, testing strategies, CI/CD pipelines."}
+];
+
+function renderCourses() {
+    document.getElementById('course-grid').innerHTML = courses.map(c => `
+        <div class="course-card">
+            <h3>${c.name}</h3>
+            <div class="semester">${c.semester}</div>
+            <p>${c.desc}</p>
+        </div>
+    `).join('');
+}
+
+// Interactive terminals
+const projectInfo = {
+    compiler: {
+        header: "scc - c compiler",
+        prompt: "$",
+        desc: `<h3>Compiler (C, ~2500 LOC)</h3>
+<p>A compiler for a C-like language targeting a stack-based virtual machine.</p>
+<p><strong>Pipeline:</strong> Source → <code>Lexer</code> → <code>Parser</code> → <code>AST</code> → <code>Semantic Analysis</code> → <code>Code Gen</code> → <code>VM Execution</code></p>
+<p><strong>Features:</strong> Functions, recursion, loops, arrays, structs, type checking, operator precedence, constant folding</p>
+<p><strong>Try:</strong> <code>compile fibonacci</code>, <code>compile calculator</code>, <code>tokens</code>, <code>help</code></p>`,
+        commands: {}
+    },
+    os: {
+        header: "mini-os v0.1 kernel simulation",
+        prompt: "os:/$",
+        desc: `<h3>Operating System (C, ~2000 LOC)</h3>
+<p>A kernel simulation demonstrating core OS concepts.</p>
+<p><strong>Components:</strong> <code>Memory Manager</code> (paging, LRU replacement) · <code>Process Scheduler</code> (RR, Priority, FCFS) · <code>File System</code> (inodes, blocks) · <code>Shell</code></p>
+<p><strong>Try:</strong> <code>ps</code>, <code>spawn httpd 8</code>, <code>meminfo</code>, <code>ls</code>, <code>help</code></p>`,
+        commands: {}
+    },
+    db: {
+        header: "sequel-lite v0.1 - SQL Database Engine",
+        prompt: "db>",
+        desc: `<h3>Database Engine (C, ~2000 LOC)</h3>
+<p>A SQL database with B-tree indexing and a hand-written SQL parser.</p>
+<p><strong>Components:</strong> <code>B-Tree</code> storage engine · <code>SQL Parser</code> · <code>Query Executor</code> · <code>WHERE/JOIN/ORDER BY</code> support</p>
+<p><strong>Try:</strong> <code>CREATE TABLE</code>, <code>INSERT</code>, <code>SELECT</code>, <code>demo</code>, <code>help</code></p>`,
+        commands: {}
+    }
+};
+
+// Simulated command outputs
+projectInfo.compiler.commands = {
+    'help': 'Usage: scc [options] <source-file>\nOptions:\n  --tokens     Print token stream\n  --ast        Print abstract syntax tree\n  --bytecode   Print generated bytecode\n  --no-run     Don\'t execute the program\n\nDemo commands:\n  compile fibonacci  - Compile and run fibonacci example\n  compile calculator - Compile and run calculator example\n  tokens             - Show lexer output for sample code\n  ast                - Show AST for sample code',
+    'compile fibonacci': '=== Compiling fibonacci.sc ===\nLexing... 47 tokens\nParsing... OK\nSemantic analysis... OK\nCode generation... 84 instructions\n\n=== Output ===\nFibonacci sequence (recursive):\n0\n1\n1\n2\n3\n5\n8\n13\n21\n34\n\nExit code: 0',
+    'compile calculator': '=== Compiling calculator.sc ===\nLexing... 62 tokens\nParsing... OK\nSemantic analysis... OK\nCode generation... 95 instructions\n\n=== Output ===\n2^10 =\n1024\n5! =\n120\n10! =\n3628800\nGCD(48, 18) =\n6\nExpression: 3 + 4 * 2 =\n11\nExpression: (3 + 4) * 2 =\n14\n\nExit code: 0',
+    'tokens': '=== Token stream for: int x = 5 + 3 * 2; ===\n  [1:1]  INT          \'int\'\n  [1:5]  IDENT        \'x\'\n  [1:7]  ASSIGN       \'=\'\n  [1:9]  INT_LIT      \'5\'\n  [1:11] PLUS         \'+\'\n  [1:13] INT_LIT      \'3\'\n  [1:15] STAR         \'*\'\n  [1:17] INT_LIT      \'2\'\n  [1:18] SEMICOLON    \';\'\n  [1:19] EOF          \'\'',
+    'ast': '=== AST for: if (x > 0) { return x * 2; } ===\nIf\n  BinaryExpr: GT\n    Ident: x\n    IntLit: 0\n  Block\n    Return\n      BinaryExpr: STAR\n        Ident: x\n        IntLit: 2'
+};
+
+projectInfo.os.commands = {
+    'help': 'Available commands:\n  ps                  - List processes\n  spawn <name> [pri]  - Create a new process\n  kill <pid>          - Terminate a process\n  tick [n]            - Advance scheduler n ticks\n  schedule            - Run one scheduling cycle\n  ls [path]           - List directory contents\n  cd <path>           - Change directory\n  pwd                 - Print working directory\n  mkdir <name>        - Create directory\n  touch <name>        - Create empty file\n  meminfo             - Memory manager status\n  fsinfo              - File system status\n  policy <rr|pri|fcfs>- Change scheduler policy',
+    'ps': '\n=== Scheduler Status ===\nPolicy:           Round Robin\nTime quantum:     3 ticks\nCurrent PID:      -1\nActive processes: 2\nContext switches: 0\n\n  PID   NAME             STATE        PRI   CPU      WAIT\n  ---   ----             -----        ---   ---      ----\n  1     init             READY        10    0        0\n  2     idle             READY        0     0        0',
+    'spawn httpd 8': '[kernel] Created process \'httpd\' (PID 3, priority 8)',
+    'spawn sshd 7': '[kernel] Created process \'sshd\' (PID 4, priority 7)',
+    'schedule': '[kernel] Scheduled: init (PID 1)',
+    'tick 5': '[kernel] Advanced 5 tick(s)\n[kernel] Running: init (PID 1)',
+    'meminfo': '\n=== Memory Manager Status ===\nTotal pages:     256\nFree pages:      248\nUsed pages:      8\nPage size:       4096 bytes\nTotal memory:    1024 KB\nFree memory:     992 KB\nPage faults:     0\nTotal allocs:    8\nTotal frees:     0\n\nPage frame map:\n  KKKK####............................',
+    'ls': '\n  TYPE     SIZE   PERM     MODIFIED             NAME\n  ----     ----   ----     --------             ----\n  DIR      0      0755     2022-11-15 14:30     bin\n  DIR      0      0755     2022-11-15 14:30     home\n  DIR      0      0755     2022-11-15 14:30     etc\n  DIR      0      0755     2022-11-15 14:30     tmp',
+    'pwd': '/',
+    'fsinfo': '\n=== File System Status ===\nTotal files:       2\nTotal directories: 5\nUsed blocks:       2 / 512\nBlock size:        512 bytes\nTotal capacity:    256 KB\nUsed space:        1 KB'
+};
+
+projectInfo.db.commands = {
+    'help': 'Supported SQL:\n  CREATE TABLE name (col1 TYPE, col2 TYPE, ...)\n  INSERT INTO name VALUES (val1, val2, ...)\n  SELECT */cols FROM name [WHERE ...] [ORDER BY ...] [LIMIT n]\n  UPDATE name SET col = val [WHERE ...]\n  DELETE FROM name [WHERE ...]\n  SHOW TABLES\n  DESCRIBE name\n\nCommands: .btree <table>, .stats <table>, .demo, .quit',
+    'demo': 'Running demo...\n\ndb> CREATE TABLE users (id INT PRIMARY KEY, name TEXT, email TEXT, age INT)\nTable \'users\' created (4 columns)\n\ndb> INSERT INTO users VALUES (1, \'Alice\', \'alice@example.com\', 28)\nInserted row (id=1)\ndb> INSERT INTO users VALUES (2, \'Bob\', \'bob@example.com\', 34)\nInserted row (id=2)\ndb> INSERT INTO users VALUES (3, \'Charlie\', \'charlie@example.com\', 22)\nInserted row (id=3)\n\ndb> SELECT * FROM users\n+----+----------+---------------------+-----+\n| id | name     | email               | age |\n+----+----------+---------------------+-----+\n| 1  | Alice    | alice@example.com   | 28  |\n| 2  | Bob      | bob@example.com     | 34  |\n| 3  | Charlie  | charlie@example.com | 22  |\n+----+----------+---------------------+-----+\n3 row(s)\n\ndb> SELECT name, age FROM users WHERE age > 25 ORDER BY age DESC\n+----------+-----+\n| name     | age |\n+----------+-----+\n| Bob      | 34  |\n| Alice    | 28  |\n+----------+-----+\n2 row(s)',
+    'SHOW TABLES': '\nTables:\n  users (4 columns, 3 rows)\n  orders (4 columns, 5 rows)\n',
+    'CREATE TABLE test (id INT, name TEXT)': 'Table \'test\' created (2 columns)',
+    'SELECT * FROM users': '+----+----------+---------------------+-----+\n| id | name     | email               | age |\n+----+----------+---------------------+-----+\n| 1  | Alice    | alice@example.com   | 28  |\n| 2  | Bob      | bob@example.com     | 34  |\n| 3  | Charlie  | charlie@example.com | 22  |\n+----+----------+---------------------+-----+\n3 row(s)'
+};
+
+let currentProject = 'compiler';
+let termHistory = [];
+
+function switchProject(name) {
+    currentProject = name;
+    const info = projectInfo[name];
+    document.getElementById('terminal-header').textContent = info.header;
+    document.getElementById('terminal-prompt').textContent = info.prompt;
+    document.getElementById('terminal-output').textContent = '';
+    document.getElementById('project-desc').innerHTML = info.desc;
+    document.querySelectorAll('.project-tabs button').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    termHistory = [];
+}
+
+function runCommand() {
+    const input = document.getElementById('terminal-input');
+    const output = document.getElementById('terminal-output');
+    const cmd = input.value.trim();
+    if (!cmd) return;
+
+    const info = projectInfo[currentProject];
+    const prompt = info.prompt;
+
+    let result = info.commands[cmd];
+    if (!result) {
+        if (cmd === 'clear') { output.textContent = ''; input.value = ''; return; }
+        result = `Command not found: ${cmd}\nType 'help' for available commands.`;
+    }
+
+    output.textContent += `${prompt} ${cmd}\n${result}\n\n`;
+    output.scrollTop = output.scrollHeight;
+    input.value = '';
+}
+
+// Init
+renderPosts();
+renderCourses();
+switchProject('compiler');
+document.getElementById('terminal-output').textContent = '';
+
+document.getElementById('post-date').value = new Date().toISOString().split('T')[0];
+</script>
+
+</body>
+</html>
